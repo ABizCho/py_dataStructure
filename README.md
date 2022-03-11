@@ -1,2 +1,2 @@
 # py_dataStructure
-Data structure using python
+자료구조 using python
