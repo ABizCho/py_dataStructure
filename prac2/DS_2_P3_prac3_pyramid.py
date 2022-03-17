@@ -2,17 +2,6 @@
 피라미드 출력
 '''
 
-# def pyramid() :
-#     height = int(input('피라미드의 높이를 입력하세요: '))
-    
-#     for i in range(height):
-#         print(i):
-     
-# pyramid()
-
-'''
-정답코드
-'''
 def pyramid() :
     height = int(input("피라미드의 높이를 입력하세요: "))
     for i in range(1, height+1) :
