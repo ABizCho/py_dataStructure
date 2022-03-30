@@ -1,8 +1,5 @@
 # Set.
 
-'''
-참고 : https://comdoc.tistory.com/entry/18-%EC%A7%91%ED%95%A9set-ADT-%ED%8C%8C%EC%9D%B4%EC%8D%AC
-'''
 class Set:
     def __init__( self ):
         self.items = []
@@ -92,3 +89,4 @@ setA.intersect(setB).display('A ∩ B:')
 setA.difference(setB).display('A - B:')
 (setA-setB).display('A - B:')
 
+print('setA가 setB의 진부분집합? : ',setA.is_propSubset_of(setB))

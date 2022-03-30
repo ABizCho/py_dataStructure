@@ -26,10 +26,5 @@ class ArrayList:
     def sort(self) :
             
 
-def myLineEditor() :
-    list = ArrayList()
-    while True :
-        command = input('[메뉴선택] i-입력, d-삭제')
-
 
 

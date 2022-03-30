@@ -41,6 +41,22 @@ class Polynomial :
         return p
     
     def multiply(self, b):
+        P = Polynomial() 
+        i=0
+        menu = 0
+        self_size = len(self.coef)
+        b_size = len(b.coef)
+        P.items = list(range(self_size + b_size))
+        for i in range(len(P.coef)) :
+            P.coef[i] = 0 
+            
+        for i in range(len(self.coef)+1):
+            for menu in range(len(b.coef)+1) :
+                P.coef[i + menu] = P.coef[i + menu] + self.coef[i]*b.coef[menu]
+        return P 
+        
+        # for menu in range(b_size):
+        #     P.coef[i + menu] = P.coef[i + menu ] + self.coef[i]*b.coef[menu]
 
     def evaluate(self, x):
         result = 0.0
@@ -59,7 +75,7 @@ def read_poly():
     p.coef.reverse()
     return p
 
-# 테스트 코드.... 뺄셈, 곱셈 추가할 것
+# ====================================== 테스트 코드.... 뺄셈, 곱셈 추가할 것
 a = read_poly()
 b = read_poly()
 c = a.add(b)
@@ -67,6 +83,6 @@ a.display("A(x) = ")
 b.display("B(x) = ")
 c.display("C(x) = ")
 print("   C(2) = ", c.evaluate(2) )
-
 d = a.subtract(b)
 d.display('D(x) = ')
+
