@@ -2,7 +2,7 @@
 
 스택이나 큐보다 입출력이 자유로운 자료구조
 
-- Deque(덱) 은 double-ended queue 의 줄임말\
+- Deque(덱) 은 double-ended queue 의 줄임말
 
   - 전단(front)와 후단(rear)에서 모두 삽입과 삭제가 가능한 큐
 
