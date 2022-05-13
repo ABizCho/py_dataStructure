@@ -1,19 +1,24 @@
-from queueCircular import CircularQueue
-
-class TNode:
+class TNODE:
     def __init__ (self, elem, left=None, right=None):
-        self.data = elem 
+        self.data = elem
         self.left = left
         self.right = right
-
+        
 def calc_height(n) :
-    if n is None : return 0
+    if n is None :
+        return 0
+        
     hLeft = calc_height(n.left)
     hRight = calc_height(n.right)
-    if (hLeft > hRight) : return hLeft + 1
-    else: return hRight + 1
+        
+    if(hLeft > hRight) :
+        return hLeft + 1
 
-#P8.4 --------------------
+    else :
+        return hRight + 1
+        
+# P8.4 ###################
+
 def checkBalanced(p) :
 	if p == None : return True
 
@@ -27,13 +32,10 @@ def checkBalanced(p) :
 
 def is_balanced(root) :
 	ret = checkBalanced(root);
-	if ret==False : 
-	    print(" 불균형적인 트리입니다.")
-	else :
-	    print(" 균형잡힌 트리입니다.");
-	return ret
+	if ret==False : print(" 불균형적인 트리입니다.")
+	else : print(" 균형잡힌 트리입니다."); return ret
 
-#P8.5 --------------------
+#P8.5 ###################
 def calcPathLength(p, level) :
 	if p == None: return 0
 
@@ -44,4 +46,3 @@ def calcPathLength(p, level) :
 def path_length(root) :
 	len = calcPathLength(root, 0)
 	print(" 전체 경로의 길이는 %d입니다." % len)
-
