@@ -8,7 +8,6 @@ BST : 이진탐색트리
     # 코드 참고 : https://skeo131.tistory.com/163?category=420274, 파이썬으로 쉽게 풀어쓴 자료구조 
 '''
 
-
 '''노드 클래스, BST의 단위 데이터로 사용'''
     # 하나의 엔트리, (키 , 값)의 형태 
 class BSTNode:
@@ -17,6 +16,7 @@ class BSTNode:
         self.value = value
         self.left = None
         self.right = None
+        self.list = [{수량:10,주문타입:매도},{수량},{ㅇㅇㅇ}] # 큐 
 
 def search_bst(n, key):
     if n is None:
