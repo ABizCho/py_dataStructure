@@ -130,6 +130,8 @@ class BSTNode:
         self.key = key
         self.left = None  
         self.right = None
+        self.isTypeBuy = isTypeBuy
+        self.value = value
         # # isTypeBuy이 True로 들어왔을 경우 매수 주문으로 판단, 매수데이터에 삽입, Vice versa.
         # if isTypeBuy == True : 
         #     self.value_buy = value
@@ -203,13 +205,14 @@ def insert_bst(r, n):
             return True
         else:
             return insert_bst(r.right, n)
-    else:
-        return False
+    # else:
+    #     return False
     
-    # elif n.key == r.key :   # 중복키를 허용 연결리스트로 옆에 연결
-    #     if r.right is None:
-    #         r.right = n
-    #         return True
+    elif n.key == r.key :   # 중복키를 허용 큐 옆에 연결
+        if n.isTypeBuy == True :
+            enQueue(r.q_value_buy, n.value)
+        else :
+            enQueue(r.q_value_sell, n.value)            
 
 # 단말 노트의 삭제
 def delete_bst_case1(parent, node, root):
@@ -315,7 +318,8 @@ def display(n):
 
 #BST
 root = BSTNode(key=1000, isTypeBuy=False, value ={'수량':100,'주문자':'성우'})
-insert_bst(root, BSTNode(key=1010, isTypeBuy =True, value ={'수량':110,'주문자':'재승'}))
+insert_bst(root, BSTNode(key=1000, isTypeBuy=True, value ={'수량':110,'주문자':'재승'}))
+
 # insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value ={'수량':50,'주문자':'재승'}))
 # insert_bst(root, BSTNode(key=1020, isTypeBuy=True, value ={'수량':5,'주문자':'성우'}))
 # insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':5,'주문자':'성우'}))
