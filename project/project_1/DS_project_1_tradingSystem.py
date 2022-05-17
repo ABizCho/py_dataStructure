@@ -191,7 +191,7 @@ def search_bst_min(n):
         n = n.left
     return n
 
-# 필수 : 삽입
+# 필수 : 삽입################################
 def insert_bst(r, n):
     if n.key < r.key:
         if r.left is None:
@@ -205,14 +205,12 @@ def insert_bst(r, n):
             return True
         else:
             return insert_bst(r.right, n)
-    # else:
-    #     return False
     
     elif n.key == r.key :   # 중복키를 허용 큐 옆에 연결
         if n.isTypeBuy == True :
             enQueue(r.q_value_buy, n.value)
-        else :
-            enQueue(r.q_value_sell, n.value)            
+        elif n.isTypeBuy == False :
+            enQueue(r.q_value_sell, n.value)
 
 # 단말 노트의 삭제
 def delete_bst_case1(parent, node, root):
@@ -297,16 +295,23 @@ def display(n):
         if n.q_value_buy.front == None :
             print('호가창 비어있음')
         else :
-            print('호가:',n.key,'   |   매수주문:',displayQueue(n.q_value_buy))
+            print('호가:',n.key,'  ||   매수주문:',displayQueue(n.q_value_buy))
     
     elif n.q_value_buy.front == None :
         if n.q_value_sell.front == None :
             print('호가창 비어있음')
         else :
-            print('호가:',n.key,'   |   매도주문:',displayQueue(n.q_value_sell))
+            print('호가:',n.key,'  ||   매도주문:',displayQueue(n.q_value_sell))
     
     else :
-        print('호가:',n.key,'   |   매수주문:',displayQueue(n.q_value_buy),'   |   매도주문:',displayQueue(n.q_value_sell))
+        print(
+            '호가:',
+              n.key,
+              '  ||   매수주문:',
+              displayQueue(n.q_value_buy),
+              '   |   매도주문:',
+              displayQueue(n.q_value_sell)
+              )
         
     display(n.right)
 
@@ -319,13 +324,16 @@ def display(n):
 #BST
 root = BSTNode(key=1000, isTypeBuy=False, value ={'수량':100,'주문자':'성우'})
 insert_bst(root, BSTNode(key=1000, isTypeBuy=True, value ={'수량':110,'주문자':'재승'}))
+insert_bst(root, BSTNode(key=1000, isTypeBuy=True, value ={'수량':110,'주문자':'재승'}))
+insert_bst(root, BSTNode(key=1100, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
+insert_bst(root, BSTNode(key=1000, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
+insert_bst(root, BSTNode(key=900, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
 
 # insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value ={'수량':50,'주문자':'재승'}))
 # insert_bst(root, BSTNode(key=1020, isTypeBuy=True, value ={'수량':5,'주문자':'성우'}))
 # insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':5,'주문자':'성우'}))
 
 display(root)
-            
 
 
 '''
