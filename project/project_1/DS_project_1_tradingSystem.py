@@ -209,8 +209,11 @@ def insert_bst(r, n):
     elif n.key == r.key :   # 중복키를 허용 큐 옆에 연결
         if n.isTypeBuy == True :
             enQueue(r.q_value_buy, n.value)
+            print('중복키1')
         elif n.isTypeBuy == False :
             enQueue(r.q_value_sell, n.value)
+            print('중복키2')
+        
 
 # 단말 노트의 삭제
 def delete_bst_case1(parent, node, root):
@@ -323,8 +326,6 @@ def display(n):
 
 #BST
 root = BSTNode(key=1000, isTypeBuy=False, value ={'수량':100,'주문자':'성우'})
-insert_bst(root, BSTNode(key=1000, isTypeBuy=True, value ={'수량':110,'주문자':'재승'}))
-insert_bst(root, BSTNode(key=1000, isTypeBuy=True, value ={'수량':110,'주문자':'재승'}))
 insert_bst(root, BSTNode(key=1100, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
 insert_bst(root, BSTNode(key=1000, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
 insert_bst(root, BSTNode(key=900, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
