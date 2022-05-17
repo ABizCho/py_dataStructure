@@ -36,9 +36,7 @@
 '''
 
 
-'''1. circular queue by linked list '''
-# Python3 program for insertion and  
-# deletion in Circular Queue  
+'''1. circular queue by linked list : 연결리스트로 구현한 큐 '''
   
 # Structure of a Node  
 class Node: 
@@ -95,39 +93,10 @@ def displayQueue(q):
         temp = temp.link 
     print(temp.data) 
     return temp.data
-  
-# # Driver Code 
-# if __name__ == '__main__': 
-  
-#     # Create a queue and initialize 
-#     # front and rear  
-#     q = Queue()  
-#     q.front = q.rear = None
-  
-#     # Inserting elements in Circular Queue  
-#     enQueue(q, 14)  
-#     enQueue(q, 22)  
-#     enQueue(q, 6)  
-  
-#     # Display elements present in  
-#     # Circular Queue  
-#     displayQueue(q)  
-  
-#     # Deleting elements from Circular Queue  
-#     print("Deleted value = ", deQueue(q))  
-#     print("Deleted value = ", deQueue(q))  
-  
-#     # Remaining elements in Circular Queue  
-#     displayQueue(q)  
-  
-#     enQueue(q, 9)  
-#     enQueue(q, 20)  
-#     displayQueue(q) 
-  
 
 
 
-'''2. BST'''
+'''2. BST using circular queue for a node'''
 
 '''
 이진탐색트리의 노드에는 
@@ -226,7 +195,6 @@ def insert_bst(r, n):
         elif n.isTypeBuy == False :
             enQueue(r.q_value_sell, n.value)
         
-
 # 단말 노트의 삭제
 def delete_bst_case1(parent, node, root):
     if parent is None:
@@ -299,6 +267,7 @@ def delete_bst(root : BSTNode, key):
 
     return root
 
+# 주문정보시스템 내의 모든 주문 출력
 def display_all(n):
     if n is None:
         return
@@ -327,7 +296,7 @@ def display_all(n):
             
     display_all(n.right)
     
-    
+# 매수주문 출력    
 def display_buy(n):
     if n is None:
         return
@@ -349,7 +318,8 @@ def display_buy(n):
             displayQueue(n.q_value_buy)
 
     display_buy(n.right)
-    
+
+# 매도주문 출력
 def display_sell(n):
     if n is None:
         return
@@ -391,12 +361,29 @@ insert_bst(root, BSTNode(key=1100, isTypeBuy=False, value ={'수량':110,'주문
 insert_bst(root, BSTNode(key=1100, isTypeBuy=False, value ={'수량':110,'주문자':'우엽'}))
 insert_bst(root, BSTNode(key=1100, isTypeBuy=True, value = {'수량':110,'주문자':'우엽'}))
 insert_bst(root, BSTNode(key=1200, isTypeBuy=False, value ={'수량':110,'주문자':'우엽'}))
+insert_bst(root, BSTNode(key=1200, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
 
 # insert_bst(root, BSTNode(key=900, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
 
 # insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value ={'수량':50,'주문자':'재승'}))
 # insert_bst(root, BSTNode(key=1020, isTypeBuy=True, value ={'수량':5,'주문자':'성우'}))
 # insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':5,'주문자':'성우'}))
+
+print('===========주문정보시스템============')
+display_all(root)
+print('======================================\n')
+
+print('===============매수정보===============')
+display_buy(root)
+print('======================================\n')
+
+print('===============매도정보===============')
+display_sell(root)
+print('======================================\n')
+
+
+print('\n\n =====<가격(키) 1100에 대한 모든 주문 삭제>=====\n')
+delete_bst(root, 1100)
 
 print('===========주문정보시스템============')
 display_all(root)
