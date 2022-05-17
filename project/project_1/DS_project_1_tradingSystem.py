@@ -286,12 +286,25 @@ def delete_bst(root : BSTNode, key):
 def display(n):
     if n is None:
         return
-    
     display(n.left)
     # print('가격:',n.key,'  ||   ','매수: ',n.value_buy,'    |   ','매도: ',n.value_sell,end=' \n')
-    # print('호가:',n.key,'   |   매수주문:',displayQueue(n.q_value_buy),
-    #       '     |   매도주문:',displayQueue(n.q_value_sell))
-    print('호가:',n.key,'   |   매수주문:',displayQueue(n.q_value_buy))
+    # print('호가:',n.key,'   |   매수주문:',displayQueue(n.q_value_buy),'     |   매도주문:',displayQueue(n.q_value_sell))
+    
+    if n.q_value_sell.front == None :
+        if n.q_value_buy.front == None :
+            print('호가창 비어있음')
+        else :
+            print('호가:',n.key,'   |   매수주문:',displayQueue(n.q_value_buy))
+    
+    elif n.q_value_buy.front == None :
+        if n.q_value_sell.front == None :
+            print('호가창 비어있음')
+        else :
+            print('호가:',n.key,'   |   매도주문:',displayQueue(n.q_value_sell))
+    
+    else :
+        print('호가:',n.key,'   |   매수주문:',displayQueue(n.q_value_buy),'   |   매도주문:',displayQueue(n.q_value_sell))
+        
     display(n.right)
 
 ################# 테스트 코드 ####################
@@ -301,8 +314,8 @@ def display(n):
 
 
 #BST
-root = BSTNode(key=1000, isTypeBuy=True, value ={'수량':100,'주문자':'성우'})
-insert_bst(root, BSTNode(key=1000, isTypeBuy = True, value ={'수량':110,'주문자':'재승'}))
+root = BSTNode(key=1000, isTypeBuy=False, value ={'수량':100,'주문자':'성우'})
+insert_bst(root, BSTNode(key=1010, isTypeBuy =True, value ={'수량':110,'주문자':'재승'}))
 # insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value ={'수량':50,'주문자':'재승'}))
 # insert_bst(root, BSTNode(key=1020, isTypeBuy=True, value ={'수량':5,'주문자':'성우'}))
 # insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':5,'주문자':'성우'}))
