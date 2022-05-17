@@ -21,6 +21,18 @@
             - Binary Tree의 노드를 연결리스트로 구현
             - 중복 키 노드 삽입 시, 기존에 존재하는 해당 키를 가진 노드(연결리스트)의 오른쪽으로 붙임
             - 탐색 시, 중복 키 노드의 연결리스트 상 순차탐색 구현
+            
+            
++++++
+
++ BST구조
+
+노드 = KEY(가격), 매수큐, 매도큐 -> 
+    -> 왜 매수매도를 큐로 하는가? : 매수-매도 가격조건 일치 시, 먼저 들어왔던 주문을 먼저 체결시켜야 하기에 선입선출을 지켜야 함
+    
+    -> 모든 노드는 고유의 가격을 가지고 있고, 노드 내에 매도큐와 매수큐가 공존할 수 없다.
+            -> 왜 공존할 수 없나? -> 동일가격의 매수매도 주문이 존재할 경우 주문이 체결되어야 하므로 둘중 하나가 체결되어 사라지거나 동일수량일 경우 둘다 소멸해야 함.
+
 '''
 
 
@@ -287,18 +299,15 @@ def delete_bst(root : BSTNode, key):
 
     return root
 
-def display(n):
+def display_all(n):
     if n is None:
         return
-    display(n.left)
-    # print('가격:',n.key,'  ||   ','매수: ',n.value_buy,'    |   ','매도: ',n.value_sell,end=' \n')
-    # print('호가:',n.key,'   |   매수주문:',displayQueue(n.q_value_buy),'     |   매도주문:',displayQueue(n.q_value_sell))
+    display_all(n.left)
     
     if n.q_value_sell.front == None :
         if n.q_value_buy.front == None :
             print('호가창 비어있음')
         else :
-            # print('호가:',n.key,'  ||   매수주문:',displayQueue(n.q_value_buy))
             print('호가: ',n.key,'   ||  ','매수주문: ',end='')
             displayQueue(n.q_value_buy)
     
@@ -306,21 +315,68 @@ def display(n):
         if n.q_value_sell.front == None :
             print('호가창 비어있음')
         else :
-            # print('호가:',n.key,'  ||   매도주문:',displayQueue(n.q_value_sell))
             print('호가: ',n.key,'   ||  ','매도주문: ',end='')
             displayQueue(n.q_value_sell)
             
     
     else :
-            # print('호가:',n.key,'  ||   매도주문:',displayQueue(n.q_value_sell))
             print('호가: ',n.key,'   ||  ','매수주문: ',end='')
             displayQueue(n.q_value_buy)
-            print('               |   매도주문: ',end='')
+            print('               ||   매도주문: ',end='')
             displayQueue(n.q_value_sell)
-
+            
+    display_all(n.right)
+    
+    
+def display_buy(n):
+    if n is None:
+        return
+    display_buy(n.left)
+    
+    if n.q_value_sell.front == None :
+        if n.q_value_buy.front == None :
+            print('호가창 비어있음')
+        else :
+            print('호가: ',n.key,'   ||  ','매수주문: ',end='')
+            displayQueue(n.q_value_buy)
+    
+    elif n.q_value_buy.front == None :
+        if n.q_value_sell.front == None :
+            print('호가창 비어있음')
         
-    display(n.right)
+    else :
+            print('호가: ',n.key,'   ||  ','매수주문: ',end='')
+            displayQueue(n.q_value_buy)
 
+    display_buy(n.right)
+    
+def display_sell(n):
+    if n is None:
+        return
+    display_sell(n.left)
+    
+    if n.q_value_sell.front == None :
+        if n.q_value_buy.front == None :
+            print('호가창 비어있음')
+    
+    elif n.q_value_buy.front == None :
+        if n.q_value_sell.front == None :
+            print('호가창 비어있음')
+        else :
+            print('호가: ',n.key,'   ||  ','매도주문: ',end='')
+            displayQueue(n.q_value_sell)
+            
+    
+    else :
+            print('호가: ',n.key,'   ||  ','매도주문: ',end='')
+            displayQueue(n.q_value_sell)
+            
+    display_sell(n.right)
+    
+# def display_sell(n):
+
+
+''''''''''''
 ################# 테스트 코드 ####################
 ### 1000 ~ 1100 사에에서 10의 단위로 호가되는 한 주식의 주문시스템
 
@@ -342,16 +398,15 @@ insert_bst(root, BSTNode(key=1200, isTypeBuy=False, value ={'수량':110,'주문
 # insert_bst(root, BSTNode(key=1020, isTypeBuy=True, value ={'수량':5,'주문자':'성우'}))
 # insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':5,'주문자':'성우'}))
 
-display(root)
+print('===========주문정보시스템============')
+display_all(root)
+print('======================================\n')
 
+print('===============매수정보===============')
+display_buy(root)
+print('======================================\n')
 
-'''
-BST구조
+print('===============매도정보===============')
+display_sell(root)
+print('======================================\n')
 
-노드 = KEY(가격), 매수큐, 매도큐 -> 
-    -> 왜 매수매도를 큐로 하는가? : 매수-매도 가격조건 일치 시, 먼저 들어왔던 주문을 먼저 체결시켜야 하기에 선입선출을 지켜야 함
-    
-    -> 모든 노드는 고유의 가격을 가지고 있고, 노드 내에 매도큐와 매수큐가 공존할 수 없다.
-            -> 왜 공존할 수 없나? -> 동일가격의 매수매도 주문이 존재할 경우 주문이 체결되어야 하므로 둘중 하나가 체결되어 사라지거나 동일수량일 경우 둘다 소멸해야 함.
-
-'''
