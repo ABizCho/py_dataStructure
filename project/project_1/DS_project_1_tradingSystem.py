@@ -81,7 +81,7 @@ def displayQueue(q):
     while (temp.link != q.front): 
         print(temp.data, end = " ")  
         temp = temp.link 
-    # print(temp.data) 
+    print(temp.data) 
     return temp.data
   
 # # Driver Code 
@@ -126,7 +126,7 @@ KEY, 매수큐 ,매도큐 가 존재한다.
     - 큐는 수량의 값을 갖는다.
 '''
 class BSTNode:
-    def __init__(self, isTypeBuy: bool, key: int, value):
+    def __init__(self, isTypeBuy: bool, key: int, value: dict):
         self.key = key
         self.left = None  
         self.right = None
@@ -139,6 +139,8 @@ class BSTNode:
         # elif isTypeBuy == False :
         #     self.value_sell = value
         #     self.value_buy = None
+        
+        
         
         if isTypeBuy == True :
             self.q_value_buy = Queue()
@@ -209,10 +211,8 @@ def insert_bst(r, n):
     elif n.key == r.key :   # 중복키를 허용 큐 옆에 연결
         if n.isTypeBuy == True :
             enQueue(r.q_value_buy, n.value)
-            print('중복키1')
         elif n.isTypeBuy == False :
             enQueue(r.q_value_sell, n.value)
-            print('중복키2')
         
 
 # 단말 노트의 삭제
@@ -298,23 +298,26 @@ def display(n):
         if n.q_value_buy.front == None :
             print('호가창 비어있음')
         else :
-            print('호가:',n.key,'  ||   매수주문:',displayQueue(n.q_value_buy))
+            # print('호가:',n.key,'  ||   매수주문:',displayQueue(n.q_value_buy))
+            print('호가: ',n.key,'   ||  ','매수주문: ',end='')
+            displayQueue(n.q_value_buy)
     
     elif n.q_value_buy.front == None :
         if n.q_value_sell.front == None :
             print('호가창 비어있음')
         else :
-            print('호가:',n.key,'  ||   매도주문:',displayQueue(n.q_value_sell))
+            # print('호가:',n.key,'  ||   매도주문:',displayQueue(n.q_value_sell))
+            print('호가: ',n.key,'   ||  ','매도주문: ',end='')
+            displayQueue(n.q_value_sell)
+            
     
     else :
-        print(
-            '호가:',
-              n.key,
-              '  ||   매수주문:',
-              displayQueue(n.q_value_buy),
-              '   |   매도주문:',
-              displayQueue(n.q_value_sell)
-              )
+            # print('호가:',n.key,'  ||   매도주문:',displayQueue(n.q_value_sell))
+            print('호가: ',n.key,'   ||  ','매수주문: ',end='')
+            displayQueue(n.q_value_buy)
+            print('               |   매도주문: ',end='')
+            displayQueue(n.q_value_sell)
+
         
     display(n.right)
 
@@ -325,10 +328,15 @@ def display(n):
 
 
 #BST
-root = BSTNode(key=1000, isTypeBuy=False, value ={'수량':100,'주문자':'성우'})
+root = BSTNode(key=1000, isTypeBuy=False, value ={'수량':1,'주문자':'성우'})
 insert_bst(root, BSTNode(key=1100, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
-insert_bst(root, BSTNode(key=1000, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
-insert_bst(root, BSTNode(key=900, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
+insert_bst(root, BSTNode(key=1100, isTypeBuy=False, value ={'수량':110,'주문자':'재승'}))
+insert_bst(root, BSTNode(key=1100, isTypeBuy=False, value ={'수량':110,'주문자':'강민'}))
+insert_bst(root, BSTNode(key=1100, isTypeBuy=False, value ={'수량':110,'주문자':'우엽'}))
+insert_bst(root, BSTNode(key=1100, isTypeBuy=True, value = {'수량':110,'주문자':'우엽'}))
+insert_bst(root, BSTNode(key=1200, isTypeBuy=False, value ={'수량':110,'주문자':'우엽'}))
+
+# insert_bst(root, BSTNode(key=900, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
 
 # insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value ={'수량':50,'주문자':'재승'}))
 # insert_bst(root, BSTNode(key=1020, isTypeBuy=True, value ={'수량':5,'주문자':'성우'}))
