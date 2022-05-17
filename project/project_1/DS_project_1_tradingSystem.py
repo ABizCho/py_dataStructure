@@ -22,7 +22,13 @@
             - 중복 키 노드 삽입 시, 기존에 존재하는 해당 키를 가진 노드(연결리스트)의 오른쪽으로 붙임
             - 탐색 시, 중복 키 노드의 연결리스트 상 순차탐색 구현
             
-            
+
+한계점 : 
+    - 새로운 매수주문의 가격(키) 보다 가격이 낮은 기존 매도주문과의 체결
+    - 새로운 매도주문의 가격(키) 보다 가격이 높은 기존 매수주문과의 체결
+    
+시간관계 상 가격이 정확히 일치하는 경우의 매수-매도 주문간의 거래체결은 구현 하였으나,
+위의 두가지 기능 '(속칭 드르륵 긁히는 거래체결)'은 어려움을 겪어 시간관계상 구현하지 못했습니다  
 +++++
 
 + BST구조
@@ -37,6 +43,7 @@
 
 
 '''1. circular queue by linked list : 연결리스트로 구현한 큐 '''
+    #ref : https://www.geeksforgeeks.org/circular-queue-set-2-circular-linked-list-implementation/
   
 # Structure of a Node  
 class Node: 
@@ -68,13 +75,12 @@ def deQueue(q):
         print("Queue is empty")  
         return -999999999999
   
-    # If this is the last node to be deleted  
     value = None # Value to be dequeued  
     if (q.front == q.rear): 
         value = q.front.data 
         q.front = None
         q.rear = None
-    else: # There are more than one nodes  
+    else: 
         temp = q.front  
         value = temp.data  
         q.front = q.front.link  
@@ -86,8 +92,6 @@ def deQueue(q):
 # of Circular Queue  
 def displayQueue(q): 
     temp = q.front  
-    # print("Elements in Circular Queue are: ",  
-    #                                end = " ")  
     while (temp.link != q.front): 
         print(temp.data, end = " ")  
         temp = temp.link 
@@ -100,7 +104,7 @@ def displayQueue(q):
 
 '''
 이진탐색트리의 노드에는 
-KEY, 매수큐 ,매도큐 가 존재한다.
+KEY, 매수큐, 매도큐 가 존재한다.
 
     - KEY는 가격을 담는다.
     - 매수/매도 타입을 인자로 받아 매수큐,매도큐 를 선택하여 들어간다.
@@ -120,8 +124,6 @@ class BSTNode:
         # elif isTypeBuy == False :
         #     self.value_sell = value
         #     self.value_buy = None
-        
-        
         
         if isTypeBuy == True :
             self.q_value_buy = Queue()
@@ -175,6 +177,10 @@ def search_bst_min(n):
     return n
 
 # 필수 : 삽입################################
+'''
+주문을 삽입할 때, 해당하는 키(가격)의 노드에 '반대되는 큐(매수/매도)'의 기존 주문이 존재할 경우
+주문이 체결되는 것으로 간주하여, 존재하는 수량만큼의 반대주문을 차감한다.
+'''
 def insert_bst(r, n):
     if n.key < r.key:
         if r.left is None:
@@ -355,13 +361,13 @@ def display_sell(n):
 
 #BST
 root = BSTNode(key=1000, isTypeBuy=False, value ={'수량':1,'주문자':'성우'})
-insert_bst(root, BSTNode(key=1100, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
-insert_bst(root, BSTNode(key=1100, isTypeBuy=False, value ={'수량':110,'주문자':'재승'}))
-insert_bst(root, BSTNode(key=1100, isTypeBuy=False, value ={'수량':110,'주문자':'강민'}))
-insert_bst(root, BSTNode(key=1100, isTypeBuy=False, value ={'수량':110,'주문자':'우엽'}))
-insert_bst(root, BSTNode(key=1100, isTypeBuy=True, value = {'수량':110,'주문자':'우엽'}))
-insert_bst(root, BSTNode(key=1200, isTypeBuy=False, value ={'수량':110,'주문자':'우엽'}))
-insert_bst(root, BSTNode(key=1200, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
+insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value ={'수량':300,'주문자':'호준'}))
+insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value ={'수량':50,'주문자':'재승'}))
+insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value ={'수량':450,'주문자':'강민'}))
+insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value ={'수량':100,'주문자':'우엽'}))
+insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value = {'수량':70,'주문자':'우엽'}))
+insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value ={'수량':200,'주문자':'우엽'}))
+insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value ={'수량':1000,'주문자':'호준'}))
 
 # insert_bst(root, BSTNode(key=900, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
 
@@ -382,18 +388,18 @@ display_sell(root)
 print('======================================\n')
 
 
-print('\n\n =====<가격(키) 1100에 대한 모든 주문 삭제>=====\n')
-delete_bst(root, 1100)
+# print('\n\n =====<가격(키) 1100에 대한 모든 주문 삭제>=====\n')
+# delete_bst(root, 1100)
 
-print('===========주문정보시스템============')
-display_all(root)
-print('======================================\n')
+# print('===========주문정보시스템============')
+# display_all(root)
+# print('======================================\n')
 
-print('===============매수정보===============')
-display_buy(root)
-print('======================================\n')
+# print('===============매수정보===============')
+# display_buy(root)
+# print('======================================\n')
 
-print('===============매도정보===============')
-display_sell(root)
-print('======================================\n')
+# print('===============매도정보===============')
+# display_sell(root)
+# print('======================================\n')
 
