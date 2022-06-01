@@ -16,7 +16,6 @@ class BSTNode:
         self.value = value
         self.left = None
         self.right = None
-        self.list = [{수량:10,주문타입:매도},{수량},{ㅇㅇㅇ}] # 큐 
 
 def search_bst(n, key):
     if n is None:
@@ -168,9 +167,11 @@ insert_bst(root, BSTNode(22, None))
 insert_bst(root, BSTNode(30, None))
 insert_bst(root, BSTNode(90, None))
 
-display(root)
-delete_bst(root, 18)
-print()
-display(root)
+# display(root)
+# delete_bst(root, 18)
+# print()
+# display(root)
+
+
             
 
