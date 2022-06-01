@@ -10,34 +10,35 @@
 이런 문제를 해결하고자 최근에 배운 이진탐색트리맵을 후보로 검토해보았으나, BST의 정렬 유지를 위해 주문 가격을 키로 고려한다면 반드시 중복키가 발생 할텐데
 중복 키를 고려할 시 발생하는 비효율 문제로 이 또한 보류하기로 하였다.
 
-그렇게 나온 대안이 '이진트리 + 연결리스트' 구조이다. 
 
-    # Binary Tree + Linked List
-        - 중복키 문제 해결 가능
-        - 이진트리의 Node에 중복키들을 저장할 연결리스트를 준비
-        - BT에서 중복 노드에 도달 시, 연결리스트의 순차적 접근으로 FindFisrt/FindNext 구현 가능
-        
-        구현 방법 계획 
-            - Binary Tree의 노드를 연결리스트로 구현
-            - 중복 키 노드 삽입 시, 기존에 존재하는 해당 키를 가진 노드(연결리스트)의 오른쪽으로 붙임
-            - 탐색 시, 중복 키 노드의 연결리스트 상 순차탐색 구현
-            
+그렇게 나온 대안이 'BST + CircularQueue by linked list' 구조이다.
+해당 구조는 BST에 가격을 KEY로 잡았을 때 중복 키 문제도 해결하면서, QUEUE의 선입 선출을 이용하여 최전방에 있는 매수/매도 주문의 빠른 체결을 가능하게 할 수 있다.
 
-한계점 : 
-    - 새로운 매수주문의 가격(키) 보다 가격이 낮은 기존 매도주문과의 체결
-    - 새로운 매도주문의 가격(키) 보다 가격이 높은 기존 매수주문과의 체결
-    
-시간관계 상 가격이 정확히 일치하는 경우의 매수-매도 주문간의 거래체결은 구현 하였으나,
-위의 두가지 기능 '(속칭 드르륵 긁히는 거래체결)'은 어려움을 겪어 시간관계상 구현하지 못했습니다  
-+++++
+BST구조
 
-+ BST구조
-
+##
 노드 = KEY(가격), 매수큐, 매도큐 -> 
     -> 왜 매수매도를 큐로 하는가? : 매수-매도 가격조건 일치 시, 먼저 들어왔던 주문을 먼저 체결시켜야 하기에 선입선출을 지켜야 함
     
     -> 모든 노드는 고유의 가격을 가지고 있고, 노드 내에 매도큐와 매수큐가 공존할 수 없다.
             -> 왜 공존할 수 없나? -> 동일가격의 매수매도 주문이 존재할 경우 주문이 체결되어야 하므로 둘중 하나가 체결되어 사라지거나 동일수량일 경우 둘다 소멸해야 함.
+
+    # BST + CircularQueue
+        - 중복키 문제 해결 가능
+        - 이진트리의 Node 클래스에 매수주문/매도주문 을 저장할 두개의 큐를 구현
+        
+        구현 방법 계획 
+            - Binary Tree의 노드에 매수큐/매도큐 구현
+            - 중복 키(가격) 노드 삽입 시, 값만 해당 주문타입 큐에 value 삽입
+            
+
+한계점 : 
+    - 삽입 시 자동 주문 체결
+    - 새로운 매수주문의 가격(키) 보다 가격이 낮은 기존 매도주문과의 체결
+    - 새로운 매도주문의 가격(키) 보다 가격이 높은 기존 매수주문과의 체결
+    
+시간관계 상 가격이 정확히 일치하는 경우의 매수-매도 주문간의 거래체결은 구현 하였으나,
+위의 두가지 기능 '(속칭 드르륵 긁히는 거래체결)'은 어려움을 겪어 시간관계상 구현하지 못했습니다  
 
 '''
 
@@ -111,7 +112,7 @@ KEY, 매수큐, 매도큐 가 존재한다.
     - 큐는 수량의 값을 갖는다.
 '''
 class BSTNode:
-    def __init__(self, isTypeBuy: bool, key: int, value: dict):
+    def __init__(self, isTypeBuy: bool, key: int, value: dict) :
         self.key = key
         self.left = None  
         self.right = None
@@ -178,8 +179,7 @@ def search_bst_min(n):
 
 # 필수 : 삽입################################
 '''
-주문을 삽입할 때, 해당하는 키(가격)의 노드에 '반대되는 큐(매수/매도)'의 기존 주문이 존재할 경우
-주문이 체결되는 것으로 간주하여, 존재하는 수량만큼의 반대주문을 차감한다.
+주문을 삽입할 때, 해당하는 키(가격)의 노드에 '반대되는 큐(매수/매도)'의 기존 주문이 존재할 경우 주문이 체결되는 것으로 간주하여, 존재하는 수량만큼의 반대주문을 차감한다.
 '''
 def insert_bst(r, n):
     if n.key < r.key:
@@ -197,6 +197,9 @@ def insert_bst(r, n):
     
     elif n.key == r.key :   # 중복키를 허용 큐 옆에 연결
         if n.isTypeBuy == True :
+            # if r.q_value_sell != None :
+            #     comp = deQueue(r.q_value_buy)
+            #     print(comp)
             enQueue(r.q_value_buy, n.value)
         elif n.isTypeBuy == False :
             enQueue(r.q_value_sell, n.value)
@@ -356,24 +359,17 @@ def display_sell(n):
 ################# 테스트 코드 ####################
 ### 1000 ~ 1100 사에에서 10의 단위로 호가되는 한 주식의 주문시스템
 
-#Q
 
-
-#BST
 root = BSTNode(key=1000, isTypeBuy=False, value ={'수량':1,'주문자':'성우'})
 insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value ={'수량':300,'주문자':'호준'}))
 insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value ={'수량':50,'주문자':'재승'}))
-insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value ={'수량':450,'주문자':'강민'}))
-insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value ={'수량':100,'주문자':'우엽'}))
+insert_bst(root, BSTNode(key=990, isTypeBuy=False, value ={'수량':450,'주문자':'강민'}))
+insert_bst(root, BSTNode(key=990, isTypeBuy=True, value ={'수량':450,'주문자':'성우'}))
+insert_bst(root, BSTNode(key=970, isTypeBuy=False, value ={'수량':100,'주문자':'우엽'}))
 insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value = {'수량':70,'주문자':'우엽'}))
 insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value ={'수량':200,'주문자':'우엽'}))
 insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value ={'수량':1000,'주문자':'호준'}))
 
-# insert_bst(root, BSTNode(key=900, isTypeBuy=False, value ={'수량':110,'주문자':'호준'}))
-
-# insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value ={'수량':50,'주문자':'재승'}))
-# insert_bst(root, BSTNode(key=1020, isTypeBuy=True, value ={'수량':5,'주문자':'성우'}))
-# insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':5,'주문자':'성우'}))
 
 print('===========주문정보시스템============')
 display_all(root)
@@ -388,8 +384,24 @@ display_sell(root)
 print('======================================\n')
 
 
-# print('\n\n =====<가격(키) 1100에 대한 모든 주문 삭제>=====\n')
-# delete_bst(root, 1100)
+print('\n<<<<<가격(키) 1010에 대한 모든 주문 삭제>>>>>>\n')
+delete_bst(root, 1010)
+
+print('===========주문정보시스템============')
+display_all(root)
+print('======================================\n')
+
+
+# '''테스트코드2 : 값이 수량이라고 가정'''
+# root = BSTNode(key=1000, isTypeBuy=False, value =200)
+# insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value =300))
+# insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value =50))
+# insert_bst(root, BSTNode(key=990, isTypeBuy=False, value =450))
+# insert_bst(root, BSTNode(key=990, isTypeBuy=True, value =150))
+# insert_bst(root, BSTNode(key=990, isTypeBuy=False, value =250))
+# insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value = 360))
+# insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value =170))
+# insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value =500))
 
 # print('===========주문정보시스템============')
 # display_all(root)
@@ -402,4 +414,3 @@ print('======================================\n')
 # print('===============매도정보===============')
 # display_sell(root)
 # print('======================================\n')
-
