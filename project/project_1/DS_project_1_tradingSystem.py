@@ -57,7 +57,6 @@ class Queue:
         self.front = None
         self.rear = None
   
-# Function to create Circular queue  
 def enQueue(q, value): 
     temp = Node()  
     temp.data = value  
@@ -69,14 +68,13 @@ def enQueue(q, value):
     q.rear = temp  
     q.rear.link = q.front 
   
-# Function to delete element from  
-# Circular Queue  
 def deQueue(q): 
     if (q.front == None): 
         print("Queue is empty")  
         return -999999999999
   
     value = None # Value to be dequeued  
+    
     if (q.front == q.rear): 
         value = q.front.data 
         q.front = None
@@ -384,8 +382,8 @@ display_sell(root)
 print('======================================\n')
 
 
-print('\n<<<<<가격(키) 1010에 대한 모든 주문 삭제>>>>>>\n')
-delete_bst(root, 1010)
+print('\n<<<<<가격(키) 900에 대한 모든 주문 삭제>>>>>>\n')
+delete_bst(root, 100)
 
 print('===========주문정보시스템============')
 display_all(root)
