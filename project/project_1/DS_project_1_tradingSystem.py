@@ -404,7 +404,7 @@ def display_sell(n):
 
 root = BSTNode(key=1000, isTypeBuy=False, value ={'수량':1,'주문자':'성우'})
 insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':150,'주문자':'성우'}))
-insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value ={'수량':300,'주문자':'호준'}))
+insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value ={'수량':300,'주문자':'해루'}))
 
 insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value ={'수량':100,'주문자':'재승'}))
 insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value ={'수량':50,'주문자':'우석'}))
