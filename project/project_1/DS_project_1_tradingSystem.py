@@ -219,6 +219,7 @@ def insert_bst(r, n):
                     diff = SellVal - BuyVal
                     print('----주문이 체결되었습니다----\n[ 거래체결수량 : %d ]\n[ 매수 : %s, 매도 : %s ]'%(SellVal,BuyName,SellName),'\n-----------------------------\n')
                     n.value['수량'] = diff
+                    n.value['주문자'] = SellName
                     enQueue(r.q_value_buy, n.value)
             else :
                 enQueue(r.q_value_buy, n.value)
@@ -240,6 +241,7 @@ def insert_bst(r, n):
                     diff = BuyVal - SellVal
                     print('----주문이 체결되었습니다----\n[ 거래체결수량 : %d ]\n[ 매수 : %s, 매도 : %s ]'%(SellVal,BuyName,SellName),'\n-----------------------------\n')
                     n.value['수량'] = diff
+                    n.value['주문자'] = BuyName
                     enQueue(r.q_value_buy, n.value)
             else :
                 enQueue(r.q_value_sell, n.value)
@@ -402,20 +404,17 @@ def display_sell(n):
 ### 1000 ~ 1100 사에에서 10의 단위로 호가되는 한 주식의 주문시스템
 
 
-root = BSTNode(key=1000, isTypeBuy=False, value ={'수량':1,'주문자':'성우'})
+root = BSTNode(key=1000, isTypeBuy=False, value ={'수량':50,'주문자':'성우'})
+
+print('===========주문정보시스템============')
+display_all(root)
+print('======================================\n')
+
 insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':150,'주문자':'성우'}))
 insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value ={'수량':300,'주문자':'해루'}))
 
-insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value ={'수량':100,'주문자':'재승'}))
-insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value ={'수량':50,'주문자':'우석'}))
-
-insert_bst(root, BSTNode(key=990, isTypeBuy=False, value ={'수량':450,'주문자':'강민'}))
-insert_bst(root, BSTNode(key=990, isTypeBuy=True, value ={'수량':450,'주문자':'성우'}))
-
-insert_bst(root, BSTNode(key=970, isTypeBuy=False, value ={'수량':100,'주문자':'우엽'}))
-insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value = {'수량':70,'주문자':'우엽'}))
-insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value ={'수량':200,'주문자':'우엽'}))
-insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value ={'수량':1000,'주문자':'호준'}))
+insert_bst(root, BSTNode(key=900, isTypeBuy=True, value ={'수량':100,'주문자':'재승'}))
+insert_bst(root, BSTNode(key=900, isTypeBuy=False, value ={'수량':50,'주문자':'우석'}))
 
 
 print('===========주문정보시스템============')
@@ -438,28 +437,15 @@ print('===========주문정보시스템============')
 display_all(root)
 print('======================================\n')
 
-insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':150,'주문자':'성우'}))
-insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value ={'수량':300,'주문자':'호준'}))
+insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':300,'주문자':'성우'}))
+insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':100,'주문자':'호준'}))
 
-# # # '''테스트코드2 : 값이 수량이라고 가정'''
-# # # root = BSTNode(key=1000, isTypeBuy=False, value =200)
-# # # insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value =300))
-# # # insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value =50))
-# # # insert_bst(root, BSTNode(key=990, isTypeBuy=False, value =450))
-# # # insert_bst(root, BSTNode(key=990, isTypeBuy=True, value =150))
-# # # insert_bst(root, BSTNode(key=990, isTypeBuy=False, value =250))
-# # # insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value = 360))
-# # # insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value =170))
-# # # insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value =500))
+print('===========주문정보시스템============')
+display_all(root)
+print('======================================\n')
 
-# # # print('===========주문정보시스템============')
-# # # display_all(root)
-# # # print('======================================\n')
+insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value ={'수량':100,'주문자':'강민'}))
 
-# # # print('===============매수정보===============')
-# # # display_buy(root)
-# # # print('======================================\n')
-
-# # # print('===============매도정보===============')
-# # # display_sell(root)
-# # # print('======================================\n')
+print('===========주문정보시스템============')
+display_all(root)
+print('======================================\n')
