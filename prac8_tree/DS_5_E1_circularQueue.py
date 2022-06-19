@@ -1,5 +1,6 @@
 MAX_QSIZE = 10 # 큐사이즈 지정
 
+
 class CircularQueue : 
     def __init__( self ) :
         self.front = 0

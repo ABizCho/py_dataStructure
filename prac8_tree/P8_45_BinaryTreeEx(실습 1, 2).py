@@ -21,8 +21,9 @@ def calc_height(n) :
 
 def checkBalanced(p) :
 	if p == None : return True
-
+ 
 	diff = calc_height(p.left) - calc_height(p.right)
+
 	if diff < -1 or diff > 1 :
 		return False
 

@@ -46,60 +46,43 @@ BST구조
 '''1. circular queue by linked list : 연결리스트로 구현한 큐 '''
     #ref : https://www.geeksforgeeks.org/circular-queue-set-2-circular-linked-list-implementation/
   
-# Structure of a Node  
-class Node: 
-    def __init__(self): 
-        self.data = None
-        self.link = None
-  
-class Queue: 
-    def __init__(self): 
+# Linked Queue.
+class Node:
+    def __init__ (self, elem, next):
+        self.data = elem 
+        self.link = next
+
+class LinkedQueue:
+    def __init__( self ):
         self.front = None
         self.rear = None
-        
-    def isEmpty( self ) : 
-        return self.front == None
-  
-def enQueue(q, value): 
-    temp = Node()  
-    temp.data = value  
-    if (q.front == None):  
-        q.front = temp  
-    else: 
-        q.rear.link = temp  
-  
-    q.rear = temp  
-    q.rear.link = q.front 
-  
-def deQueue(q): 
-    if (q.front == None): 
-        print("Queue is empty")  
-        return -999999999999
-  
-    value = None # Value to be dequeued  
-    
-    if (q.front == q.rear): 
-        value = q.front.data 
-        q.front = None
-        q.rear = None
-    else: 
-        temp = q.front  
-        value = temp.data  
-        q.front = q.front.link  
-        q.rear.link= q.front 
-  
-    return value  
-  
-# Function displaying the elements  
-# of Circular Queue  
-def displayQueue(q): 
-    temp = q.front  
-    while (temp.link != q.front): 
-        print(temp.data, end = " ")  
-        temp = temp.link 
-    print(temp.data) 
-    return temp.data
 
+    def isEmpty( self ): return self.front == None
+
+    def enqueue( self, item ):
+        if( self.isEmpty()):
+            self.front = self.rear = Node(item, None)
+        else :
+            self.rear.link = Node(item, None)
+            self.rear = self.rear.link
+
+    def peek( self ):
+        if not self.isEmpty():
+            return self.front.data
+
+    def dequeue( self ):
+        if not self.isEmpty():
+            data = self.front.data
+            self.front = self.front.link
+            return data
+
+    def display( self, msg='LinkedQueue:' ):
+        print(msg, end='')
+        node = self.front
+        while not node == None :
+            print(node.data, end=' ')
+            node = node.link
+        print()
 
 
 '''2. BST using circular queue for a node'''
@@ -112,6 +95,8 @@ KEY, 매수큐, 매도큐 가 존재한다.
     - 매수/매도 타입을 인자로 받아 매수큐,매도큐 를 선택하여 들어간다.
     - 큐는 수량의 값을 갖는다.
 '''
+
+
 class BSTNode:
     def __init__(self, isTypeBuy: bool, key: int, value: dict) :
         self.key = key
@@ -128,17 +113,17 @@ class BSTNode:
         #     self.value_buy = None
         
         if isTypeBuy == True :
-            self.q_value_buy = Queue()
-            self.q_value_sell = Queue()
+            self.q_value_buy = LinkedQueue()
+            self.q_value_sell = LinkedQueue()
             
-            enQueue(self.q_value_buy, value)
+            self.q_value_buy.enqueue(value)
             self.q_value_sell.front = self.q_value_sell.rear = None
             
         elif isTypeBuy == False :
-            self.q_value_buy = Queue()
-            self.q_value_sell = Queue()
+            self.q_value_buy = LinkedQueue()
+            self.q_value_sell = LinkedQueue()
             
-            enQueue(self.q_value_sell, value)
+            self.q_value_sell.enqueue(value)
             self.q_value_buy.front = self.q_value_buy.rear = None
 
 
@@ -197,52 +182,13 @@ def insert_bst(r, n):
             return insert_bst(r.right, n)
     
     elif n.key == r.key :   # 중복키를 허용 큐 옆에 연결
-        
-        # 매수주문이 삽입된 경우
-        if n.isTypeBuy == True :        
+        if n.isTypeBuy == True :
             # if r.q_value_sell != None :
             #     comp = deQueue(r.q_value_buy)
             #     print(comp)
-            
-            if r.q_value_sell.isEmpty() != True : # 동일 가격대의 반대매매 셀큐가 비어있지 않다면 주문체결 조건    
-                BuyVal = n.value['수량']
-                BuyName = n.value['주문자']
-                SellData = deQueue(r.q_value_sell)
-                SellVal,SellName = SellData['수량'],SellData['주문자']
-                
-                if BuyVal >= SellVal :
-                    diff = BuyVal - SellVal
-                    print('----주문이 체결되었습니다----\n[ 거래체결수량 : %d ]\n[ 매수 : %s, 매도 : %s ]'%(SellVal,BuyName,SellName),'\n-----------------------------\n')
-                    n.value['수량'] = diff
-                    enQueue(r.q_value_buy, n.value)
-                else :
-                    diff = SellVal - BuyVal
-                    print('----주문이 체결되었습니다----\n[ 거래체결수량 : %d ]\n[ 매수 : %s, 매도 : %s ]'%(SellVal,BuyName,SellName),'\n-----------------------------\n')
-                    n.value['수량'] = diff
-                    enQueue(r.q_value_buy, n.value)
-            else :
-                enQueue(r.q_value_buy, n.value)
-        
-        # 매도주문이 삽입된 경우        
-        elif n.isTypeBuy == False :         
-            if r.q_value_buy.isEmpty() != True : # 동일 가격대의 반대매매 셀큐가 비어있지 않다면 주문체결 조건    
-                SellVal = n.value['수량']
-                SellName = n.value['주문자']
-                BuyData = deQueue(r.q_value_buy)
-                BuyVal,BuyName = BuyData['수량'],BuyData['주문자']
-                
-                if SellVal >= BuyVal :
-                    diff = SellVal - BuyVal
-                    print('----주문이 체결되었습니다----\n[ 거래체결수량 : %d ]\n[ 매수 : %s, 매도 : %s ]'%(SellVal,BuyName,SellName),'\n-----------------------------\n')
-                    n.value['수량'] = diff
-                    enQueue(r.q_value_sell, n.value)
-                else :
-                    diff = BuyVal - SellVal
-                    print('----주문이 체결되었습니다----\n[ 거래체결수량 : %d ]\n[ 매수 : %s, 매도 : %s ]'%(SellVal,BuyName,SellName),'\n-----------------------------\n')
-                    n.value['수량'] = diff
-                    enQueue(r.q_value_buy, n.value)
-            else :
-                enQueue(r.q_value_sell, n.value)
+            r.q_value_buy.enqueue(n.value)
+        elif n.isTypeBuy == False :
+            r.q_value_sell.enqueue(n.value)
         
 # 단말 노트의 삭제
 def delete_bst_case1(parent, node, root):
@@ -327,21 +273,21 @@ def display_all(n):
             print('호가창 비어있음')
         else :
             print('호가: ',n.key,'   ||  ','매수주문: ',end='')
-            displayQueue(n.q_value_buy)
+            n.q_value_buy.display(n.q_value_buy)
     
     elif n.q_value_buy.front == None :
         if n.q_value_sell.front == None :
             print('호가창 비어있음')
         else :
             print('호가: ',n.key,'   ||  ','매도주문: ',end='')
-            displayQueue(n.q_value_sell)
+            n.q_value_buy.display(n.q_value_sell)
             
     
     else :
             print('호가: ',n.key,'   ||  ','매수주문: ',end='')
-            displayQueue(n.q_value_buy)
+            n.q_value_buy.display(n.q_value_buy)
             print('               ||   매도주문: ',end='')
-            displayQueue(n.q_value_sell)
+            n.q_value_buy.display(n.q_value_sell)
             
     display_all(n.right)
     
@@ -356,7 +302,7 @@ def display_buy(n):
             print('호가창 비어있음')
         else :
             print('호가: ',n.key,'   ||  ','매수주문: ',end='')
-            displayQueue(n.q_value_buy)
+            n.q_value_buy.display(n.q_value_buy)
     
     elif n.q_value_buy.front == None :
         if n.q_value_sell.front == None :
@@ -364,7 +310,7 @@ def display_buy(n):
         
     else :
             print('호가: ',n.key,'   ||  ','매수주문: ',end='')
-            displayQueue(n.q_value_buy)
+            n.q_value_buy.display(n.q_value_buy)
 
     display_buy(n.right)
 
@@ -383,18 +329,16 @@ def display_sell(n):
             print('호가창 비어있음')
         else :
             print('호가: ',n.key,'   ||  ','매도주문: ',end='')
-            displayQueue(n.q_value_sell)
+            n.q_value_buy.display(n.q_value_sell)
             
     
     else :
             print('호가: ',n.key,'   ||  ','매도주문: ',end='')
-            displayQueue(n.q_value_sell)
+            n.q_value_buy.display(n.q_value_sell)
             
     display_sell(n.right)
     
 # def display_sell(n):
-
-# 거래체결
 
 
 ''''''''''''
@@ -403,63 +347,56 @@ def display_sell(n):
 
 
 root = BSTNode(key=1000, isTypeBuy=False, value ={'수량':1,'주문자':'성우'})
-insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':150,'주문자':'성우'}))
 insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value ={'수량':300,'주문자':'호준'}))
-
-insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value ={'수량':100,'주문자':'재승'}))
-insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value ={'수량':50,'주문자':'우석'}))
-
+insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value ={'수량':50,'주문자':'재승'}))
 insert_bst(root, BSTNode(key=990, isTypeBuy=False, value ={'수량':450,'주문자':'강민'}))
 insert_bst(root, BSTNode(key=990, isTypeBuy=True, value ={'수량':450,'주문자':'성우'}))
-
 insert_bst(root, BSTNode(key=970, isTypeBuy=False, value ={'수량':100,'주문자':'우엽'}))
 insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value = {'수량':70,'주문자':'우엽'}))
 insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value ={'수량':200,'주문자':'우엽'}))
 insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value ={'수량':1000,'주문자':'호준'}))
 
 
+# print('===========주문정보시스템============')
+# display_all(root)
+# print('======================================\n')
+
+# print('===============매수정보===============')
+# display_buy(root)
+# print('======================================\n')
+
+# print('===============매도정보===============')
+# display_sell(root)
+# print('======================================\n')
+
+
+# print('\n<<<<<가격(키) 900에 대한 모든 주문 삭제>>>>>>\n')
+# delete_bst(root, 100)
+
 print('===========주문정보시스템============')
 display_all(root)
 print('======================================\n')
 
-print('===============매수정보===============')
-display_buy(root)
-print('======================================\n')
 
-print('===============매도정보===============')
-display_sell(root)
-print('======================================\n')
+# '''테스트코드2 : 값이 수량이라고 가정'''
+# root = BSTNode(key=1000, isTypeBuy=False, value =200)
+# insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value =300))
+# insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value =50))
+# insert_bst(root, BSTNode(key=990, isTypeBuy=False, value =450))
+# insert_bst(root, BSTNode(key=990, isTypeBuy=True, value =150))
+# insert_bst(root, BSTNode(key=990, isTypeBuy=False, value =250))
+# insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value = 360))
+# insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value =170))
+# insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value =500))
 
+# print('===========주문정보시스템============')
+# display_all(root)
+# print('======================================\n')
 
-print('\n<<<<<가격(키) 900에 대한 모든 주문 삭제>>>>>>\n')
-delete_bst(root, 100)
+# print('===============매수정보===============')
+# display_buy(root)
+# print('======================================\n')
 
-print('===========주문정보시스템============')
-display_all(root)
-print('======================================\n')
-
-insert_bst(root, BSTNode(key=1030, isTypeBuy=False, value ={'수량':150,'주문자':'성우'}))
-insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value ={'수량':300,'주문자':'호준'}))
-
-# # # '''테스트코드2 : 값이 수량이라고 가정'''
-# # # root = BSTNode(key=1000, isTypeBuy=False, value =200)
-# # # insert_bst(root, BSTNode(key=1030, isTypeBuy=True, value =300))
-# # # insert_bst(root, BSTNode(key=1010, isTypeBuy=False, value =50))
-# # # insert_bst(root, BSTNode(key=990, isTypeBuy=False, value =450))
-# # # insert_bst(root, BSTNode(key=990, isTypeBuy=True, value =150))
-# # # insert_bst(root, BSTNode(key=990, isTypeBuy=False, value =250))
-# # # insert_bst(root, BSTNode(key=1010, isTypeBuy=True, value = 360))
-# # # insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value =170))
-# # # insert_bst(root, BSTNode(key=1020, isTypeBuy=False, value =500))
-
-# # # print('===========주문정보시스템============')
-# # # display_all(root)
-# # # print('======================================\n')
-
-# # # print('===============매수정보===============')
-# # # display_buy(root)
-# # # print('======================================\n')
-
-# # # print('===============매도정보===============')
-# # # display_sell(root)
-# # # print('======================================\n')
+# print('===============매도정보===============')
+# display_sell(root)
+# print('======================================\n')
